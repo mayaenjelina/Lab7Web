@@ -10,6 +10,7 @@ $routes->get('/about', 'Page::about');
 $routes->get('/contact', 'Page::contact');
 $routes->get('/faqs', 'Page::faqs');
 $routes->get('/tos', 'Page::tos');
+$routes->get('/artikel', 'Page::artikel');
 
 // Enable auto-routing for controllers/methods not explicitly defined
 $routes->setAutoRoute(true);

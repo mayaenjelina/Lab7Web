@@ -1,0 +1,12 @@
+CRITICAL - 2026-03-07 07:02:39 --> ErrorException: Cannot redeclare App\Controllers\Page::contact()
+[Method: GET, Route: about]
+in APPPATH\Controllers\Page.php on line 37.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-07 07:02:45 --> ErrorException: Cannot redeclare App\Controllers\Page::contact()
+[Method: GET, Route: about]
+in APPPATH\Controllers\Page.php on line 37.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-03-07 07:02:52 --> ErrorException: Cannot redeclare App\Controllers\Page::contact()
+[Method: GET, Route: about]
+in APPPATH\Controllers\Page.php on line 37.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

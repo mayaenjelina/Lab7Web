@@ -21,9 +21,20 @@ class Page extends BaseController
         echo "Ini halaman Terms of Service";
     }
 
-    public function contact()
-    {
-        echo "Ini halaman Contact";
-    }
+    public function artikel()
+{
+    return view('artikel', [
+        'title' => 'Halaman Artikel',
+        'content' => 'Ini adalah halaman artikel yang berisi daftar tulisan.'
+    ]);
+}
+
+public function contact()
+{
+    return view('contact', [
+        'title' => 'Halaman Kontak',
+        'content' => 'Anda bisa menghubungi kami melalui email: upbmaya@gmail.com'
+    ]);
+}
 }
 

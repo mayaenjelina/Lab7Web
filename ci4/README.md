@@ -53,5 +53,24 @@ Agar tampilan sesuai dengan gambar pada modul, saya menambahkan file style.css d
  
 7. Hasil Akhir (Halaman About)
 Saya memperbarui method pada Controller dan file View about.php agar menggunakan fungsi include untuk memanggil header dan footer.
-    ![Screenshot output](./assets/output.png)
+
+![Screenshot output](./assets/output.png)
+
+---
+
+8. Penyelesaian Tugas (Menambah Menu Artikel dan Kontak)
+Sesuai dengan instruksi pada bagian "Pertanyaan dan Tugas", saya telah melengkapi navigasi website dengan menambahkan halaman Artikel dan Kontak.
+
+**Langkah yang dilakukan:**
+1. **Update Controller**: Menambahkan method `artikel()` dan `contact()`.
+2. **Membuat View**: Membuat file `artikel.php` dan `contact.php` di folder `app/Views/`.
+3. **Navigasi Aktif**: Mengatur link pada `header.php` agar semua menu dapat diakses.
+
+![Screenshot Hasil Artikel](./assets/artikel.png)
+![Screenshot Hasil Kontak](./assets/contact.png)
+
+---
+
+### 9. Kesimpulan
+Pada praktikum ini, saya telah berhasil melakukan instalasi CodeIgniter 4, memahami konsep Routing dan Controller, serta mengimplementasikan teknik *Layouting* menggunakan fungsi `include`.
  
