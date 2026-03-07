@@ -1,17 +1,18 @@
-#LAPORAN PRAKTIKUM PEMROGRAMAN WEB 2#
-##Praktikum 1: PHP Framework (CodeIgniter 4)##
+# LAPORAN PRAKTIKUM PEMROGRAMAN WEB 2
+## Praktikum 1: PHP Framework (CodeIgniter 4)
 
-*Nama : Maya Enjelina
-*NIM: 312410378
-*Kelas: I243B
-*Repository: Lab7Web
+**Nama** : Maya Enjelina  
+**NIM** : 312410378  
+**Kelas** : I243B  
+**Repository** : Lab7Web
 
-1.	Persiapan dan Instalasi
+---
 
+### 1. Persiapan dan Instalasi
 Sebelum memulai, saya melakukan instalasi framework CodeIgniter 4. Berdasarkan instruksi:
-•	Download CodeIgniter 4: Bisa melalui website resmi codeigniter.com (versi Manual Download) atau menggunakan perintah Composer.
-•	Ekstrak File: Hasil download tersebut saya ekstrak ke dalam folder web server saya di: C:\xampp\htdocs\lab11_php_ci\ci4.
-•	Saya mengaktifkan ekstensi PHP yang dibutuhkan melalui XAMPP Control Panel pada file php.ini, antara lain: extension=intl, extension=mbstring, dan extension=openssl.
+* **Download CodeIgniter 4**: Melalui website resmi codeigniter.com.
+* **Ekstrak File**: Hasil download diekstrak ke folder: `C:\xampp\htdocs\lab11_php_ci\ci4`.
+* **Aktivasi Ekstensi**: Mengaktifkan `intl`, `mbstring`, dan `openssl` pada file `php.ini`.
     ![Screenshot XAMPP](./ci4/assets/xampp.png)
     ![Screenshot php.ini](./ci4/assets/phpini.png)
  
@@ -34,12 +35,12 @@ Halaman TOS
 4. Konfigurasi Routing
 Agar alamat URL lebih rapi, saya melakukan konfigurasi pada file app/Config/Routes.php. Saya mendaftarkan rute khusus agar halaman dapat diakses tanpa harus menuliskan nama controller di URL.
     ![Screenshot routes](./ci4/assets/routes.png)
-
 5. Membuat Layout (Header dan Footer)
 Untuk menerapkan konsep reusable code, saya membagi tampilan menjadi tiga bagian utama:
-        1.	**Header: Berisi tag pembuka HTML, navigasi, dan pemanggilan CSS.**
-        2.	**Footer: Berisi sidebar dan tag penutup HTML.**
-        3.	**Content: Isi konten spesifik tiap halaman.**
+
+1. **Header**: Berisi tag pembuka HTML, navigasi, dan pemanggilan CSS.
+2. **Footer**: Berisi sidebar dan tag penutup HTML.
+3. **Content**: Isi konten spesifik tiap halaman.
 Saya membuat folder template di dalam app/Views/ dan membuat file header.php serta footer.php di dalamnya.
 Code header.php
     ![Screenshot header](./ci4/assets/header.png)
