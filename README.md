@@ -1,10 +1,10 @@
-                   **LAPORAN PRAKTIKUM PEMROGRAMAN WEB 2**
-                **Praktikum 1: PHP Framework (CodeIgniter 4)**
+#LAPORAN PRAKTIKUM PEMROGRAMAN WEB 2#
+##Praktikum 1: PHP Framework (CodeIgniter 4)##
 
-Nama : Maya Enjelina
-NIM: 312410378
-Kelas: I243B
-Repository: Lab7Web
+*Nama : Maya Enjelina
+*NIM: 312410378
+*Kelas: I243B
+*Repository: Lab7Web
 
 1.	Persiapan dan Instalasi
 
@@ -37,9 +37,9 @@ Agar alamat URL lebih rapi, saya melakukan konfigurasi pada file app/Config/Rout
 
 5. Membuat Layout (Header dan Footer)
 Untuk menerapkan konsep reusable code, saya membagi tampilan menjadi tiga bagian utama:
-        **1.	Header: Berisi tag pembuka HTML, navigasi, dan pemanggilan CSS.**
-        **2.	Footer: Berisi sidebar dan tag penutup HTML.**
-        **3.	Content: Isi konten spesifik tiap halaman.**
+        1.	**Header: Berisi tag pembuka HTML, navigasi, dan pemanggilan CSS.**
+        2.	**Footer: Berisi sidebar dan tag penutup HTML.**
+        3.	**Content: Isi konten spesifik tiap halaman.**
 Saya membuat folder template di dalam app/Views/ dan membuat file header.php serta footer.php di dalamnya.
 Code header.php
     ![Screenshot header](./ci4/assets/header.png)
