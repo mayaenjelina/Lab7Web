@@ -79,7 +79,6 @@ Pada praktikum ini, saya telah berhasil melakukan instalasi CodeIgniter 4, memah
 ------------------------------------------------------------------------------------------------
 
  ## Praktikum 2 : Framework lanjutan (CRUD)
-# Lab 7 - Pemrograman Web 2
 
 Pada praktikum ini, saya melanjutkan pengembangan aplikasi web portal berita dengan menambahkan fitur CRUD (*Create, Read, Update, Delete*) pada menu Admin.
 
@@ -89,7 +88,7 @@ Langkah pertama adalah membuat database `lab_ci4` dan tabel `artikel` menggunaka
 ![Screenshot Tabel Artikel](./ci4/assets/gambar_praktikum2/Database.png)
 
 ### **2. Mengatur Konfigurasi Database**
-Mengubah file `.env` atau `app/Config/Database.php` untuk menghubungkan aplikasi ke database MySQL. Pada praktikum ini kita gunakan konfigurasi pada file .env.
+Mengubah file `.env` atau `app/Config/Database.php` untuk menghubungkan aplikasi ke database MySQL. Pada praktikum ini saya menggunakan konfigurasi pada file .env.
 
 ![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/konfigurasi.png)
 
