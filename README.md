@@ -76,3 +76,74 @@ Sesuai dengan instruksi pada bagian "Pertanyaan dan Tugas", saya telah melengkap
 ### 9. Kesimpulan
 Pada praktikum ini, saya telah berhasil melakukan instalasi CodeIgniter 4, memahami konsep Routing dan Controller, serta mengimplementasikan teknik *Layouting* menggunakan fungsi `include`.
  
+------------------------------------------------------------------------------------------------
+
+ ## Praktikum 2 : Framework lanjutan (CRUD)
+# Lab 7 - Pemrograman Web 2
+
+Pada praktikum ini, saya melanjutkan pengembangan aplikasi web portal berita dengan menambahkan fitur CRUD (*Create, Read, Update, Delete*) pada menu Admin.
+
+### **1. Membuat Database dan Tabel**
+Langkah pertama adalah membuat database `lab_ci4` dan tabel `artikel` menggunakan MySQL.
+
+![Screenshot Tabel Artikel](./ci4/assets/gambar_praktikum2/Database.png)
+
+### **2. Mengatur Konfigurasi Database**
+Mengubah file `.env` atau `app/Config/Database.php` untuk menghubungkan aplikasi ke database MySQL. Pada praktikum ini kita gunakan konfigurasi pada file .env.
+
+![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/konfigurasi.png)
+
+### **3. Menambahkan Data di Database**
+Menambahkan beberapa data ke database agar muncul di aplikasi web
+
+![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/tambahdata_database.png)
+
+Sehingga akan tampil datanya seperti ini
+
+![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/hasil1.png)
+
+### **4. Membuat Tampilan Detail Artikel**
+Tampilan pada saat judul berita di klik maka akan diarahkan ke halaman yang berbeda.
+Artikel pertama
+
+![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/artikel1.png)
+
+Artikel kedua
+
+![Screenshot konfigurasi](./ci4/assets/gambar_praktikum2/artikel2.png)
+
+### **5. Membuat Menu Admin**
+Membuat menu admin untuk mengelola data artikel. Langkah-langkahnya meliputi:
+* **Controller**: Menambahkan method `admin_index()`.
+* **View**: Membuat file `admin_index.php` dan template `admin_header.php` serta `admin_footer.php`.
+* **Routing**: Mengatur grup rute untuk admin di `app/Config/Routes.php`.
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/menu_admin.png)
+
+### **6. Fitur Tambah Data (Create)**
+Membuat fitur Tambah data agar data dapat di tambah dengan mudah. Langkah langkah meliputi :
+* **Controller**: Menambahkan method `add()`.
+* **View**: Membuat file `form_add.php`.
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/tambah_artikel.png)
+
+Hasil tambah data
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/hasil_tambahdata.png)
+
+### **7. Fitur Ubah Data (Update)**
+Membuat fitur ubah data agar data dapat di ubah dengan mudah. Langkah langkah meliputi :
+* **Controller**: Menambahkan method `edit()`.
+* **View**: Membuat file `form_edit.php`.
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/ubah_data.png)
+
+Hasilnya "Artikel petama" menjadi "Artikel first"
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/ubah_data2.png)
+
+### **8. Fitur Hapus Data (Delete)**
+Membuat fitur ubah data agar data dapat di ubah dengan mudah. Langkah langkah meliputi :
+* **Controller**: Menambahkan method `delete()`.
+
+![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/ubah_data2.png)
