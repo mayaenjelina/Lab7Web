@@ -172,7 +172,7 @@ Untuk mendukung fitur pengurutan pada View Cell, saya menambahkan kolom tanggal 
 
 ```sql
 ALTER TABLE artikel ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
-```sql
+```
 
 ### Analisis & Evaluasi (Pertanyaan Modul)
 ### Apa manfaat utama dari penggunaan View Layout dalam pengembangan aplikasi?
