@@ -171,6 +171,7 @@ Saya mengimplementasikan View Cell untuk menampilkan daftar "Artikel Terkini". K
 Untuk mendukung fitur pengurutan pada View Cell, saya menambahkan kolom tanggal pada tabel artikel di MySQL dan juga saya menambahkan beberapa artikel baru:
 ```sql
 ALTER TABLE artikel ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+```
 
 ![Screenshot output praktikum 3](./ci4/assets/output_praktikum3.png)
 
