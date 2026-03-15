@@ -146,3 +146,41 @@ Membuat fitur ubah data agar data dapat di ubah dengan mudah. Langkah langkah me
 * **Controller**: Menambahkan method `delete()`.
 
 ![Screenshot Menu Admin](./ci4/assets/gambar_praktikum2/ubah_data2.png)
+
+----------------------------------------------------------------
+
+ ## Praktikum 3 : View Layout dan View Cell
+
+Praktikum kali ini bertujuan untuk memberikan pemahaman mendalam mengenai konsep **View Layout** pada framework CodeIgniter 4, di mana fokus utamanya adalah menciptakan sistem template tampilan yang efisien dan terstruktur. Melalui penerapan View Layout, mahasiswa diharapkan mampu menggunakan template tampilan untuk membangun kerangka website yang terpusat. Selain itu, praktikum ini juga mencakup pemahaman dan implementasi **View Cell** sebagai solusi untuk memanggil komponen antarmuka pengguna (UI) secara mandiri. Dengan menggunakan View Cell, komponen dapat bersifat modular, artinya komponen tersebut memiliki logika datanya sendiri dan dapat digunakan kembali pada berbagai halaman tanpa harus bergantung pada Controller utama.
+
+---
+
+## Langkah-langkah Praktikum
+
+### 1. Membuat Layout Utama
+Saya membuat file template induk di `app/Views/layout/main.php`. File ini berfungsi sebagai kerangka utama yang mencakup header, navigasi, dan footer.
+* **Fitur Utama:** Menggunakan `<?= $this->renderSection('content') ?>` agar halaman lain bisa mengisi konten di dalam template ini secara dinamis.
+
+### 2. Implementasi View Layout pada Halaman Home
+Saya memodifikasi halaman utama dengan membuat file `app/Views/home.php`. Halaman ini menggunakan fungsi `extend` untuk memanggil layout utama sehingga memiliki tampilan yang konsisten dengan template induk.
+
+### 3. Membuat View Cell (Komponen Modular)
+Saya mengimplementasikan View Cell untuk menampilkan daftar "Artikel Terkini". Komponen ini bekerja secara modular, di mana datanya diambil langsung melalui class `ArtikelTerkini` di folder `app/Cells/`.
+
+### 4. Konfigurasi Database
+Untuk mendukung fitur pengurutan pada View Cell, saya menambahkan kolom tanggal pada tabel artikel di MySQL dan juga saya menambahkan beberapa artikel baru:
+```sql
+ALTER TABLE artikel ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+
+![Screenshot output praktikum 3](./ci4/assets/output_praktikum3.png)
+
+### Analisis & Evaluasi (Pertanyaan Modul)
+### Apa manfaat utama dari penggunaan View Layout dalam pengembangan aplikasi?
+* Efisiensi Kode: Kita tidak perlu menuliskan kode header, navigasi, dan footer yang sama di setiap file View.
+* Kemudahan Pemeliharaan: Jika ingin mengubah tampilan menu atau footer, kita cukup mengubah satu file layout saja, dan seluruh halaman akan otomatis terupdate.
+* Konsistensi Desain: Menjamin seluruh halaman aplikasi memiliki struktur dan tampilan yang seragam/konsisten.
+
+### Apa perbedaan antara View Cell dan View biasa?
+* View Biasa: Digunakan untuk menampilkan konten utama halaman. Datanya harus dikirimkan secara manual oleh Controller menggunakan fungsi return view().
+
+* View Cell: Digunakan untuk membuat komponen UI yang modular (seperti sidebar atau widget). View Cell memiliki logika (Class) sendiri sehingga bisa memanggil datanya sendiri dari database tanpa harus bergantung pada Controller halaman tersebut.
