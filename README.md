@@ -183,3 +183,81 @@ ALTER TABLE artikel ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
 * View Biasa: Digunakan untuk menampilkan konten utama halaman. Datanya harus dikirimkan secara manual oleh Controller menggunakan fungsi return view().
 
 * View Cell: Digunakan untuk membuat komponen UI yang modular (seperti sidebar atau widget). View Cell memiliki logika (Class) sendiri sehingga bisa memanggil datanya sendiri dari database tanpa harus bergantung pada Controller halaman tersebut.
+
+----------------------------------------------------------------
+
+ ## Praktikum 4 : Framework Lanjutan (Modul Login)
+
+ Pada praktikum ini, kita belajar untuk membangun Sistem Otentikasi Pengguna (Login System) yang berfungsi sebagai pintu keamanan utama bagi aplikasi web. Sistem ini dirancang untuk memverifikasi identitas setiap pengguna yang ingin mengakses area terbatas (seperti halaman admin) melalui validasi Email dan Password.
+
+ ---
+ ### Langkah - Langkah Praktikum 
+ ### 1. Membuat Database
+ Langkah awal adalah menyiapkan tabel user pada database MySQL untuk menyimpan data login.
+
+![Screenshot database tabel](./ci4/assets/gambar_praktikum4/Database.png)
+
+### 2. Membuat Model User
+Membuat file UserModel.php di direktori app/Models untuk menangani interaksi data dengan tabel user.
+* File: app/Models/UserModel.php
+* Keterangan: Mendefinisikan properti $allowedFields agar field username, useremail, dan userpassword dapat diisi melalui aplikasi.
+
+### 3. Membuat Controller User
+Membuat controller untuk menangani logika tampilan daftar user, proses login, dan logout.
+* File: app/Controllers/User.php
+* Method Utama:
+index(): Menampilkan daftar user.
+login(): Memvalidasi email dan password menggunakan password_verify.
+logout(): Menghancurkan session user dan mengarahkan kembali ke halaman login.
+
+### 4. Membuat View Login
+Membuat antarmuka halaman login bagi pengguna.
+* File: app/Views/user/login.php
+* Keterangan: Menggunakan form dengan metode post yang mengirimkan data ke method login() di controller. Terdapat pengecekan flashdata untuk menampilkan pesan kesalahan jika login gagal.
+
+### 5. Menambahkan file Css
+Agar tampilan form login tidak hanya fungsional tetapi juga memiliki antarmuka yang menarik (User Interface), saya menambahkan kode CSS pada file style.css.
+* Sebelum CSS
+
+![Screenshot hasil](./ci4/assets/gambar_praktikum4/hasil.png)
+
+* Setelah CSS
+![Screenshot Output Akhir](./ci4/assets/gambar_praktikum4/Output.png)
+
+### 6. Membuat Database Seeder
+Menambahkan data dummy ke database untuk keperluan uji coba.
+**Langkah:**
+* Jalankan perintah php spark make:seeder UserSeeder melalui terminal/CLI.
+* Isi file app/Database/Seeds/UserSeeder.php dengan data admin (password di-hash menggunakan password_hash).
+* Jalankan php spark db:seed UserSeeder untuk memasukkan data ke tabel.
+![Screenshot seeder](./ci4/assets/gambar_praktikum4/database_Seeder.png)
+
+### 7. Menambahkan Auth Filter
+Membuat filter untuk membatasi akses halaman admin hanya untuk pengguna yang sudah login.
+* File Filter: app/Filters/Auth.php (Berisi logika pengecekan session logged_in).
+* Konfigurasi Filter: Daftarkan alias 'auth' pada file app/Config/Filters.php di dalam array $aliases.
+
+### 8. Konfigurasi Routing
+Mengatur rute aplikasi agar grup halaman admin diproteksi oleh filter auth.
+* File: app/Config/Routes.php
+
+Contoh Kode:
+
+PHP
+$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+    $routes->get('artikel', 'Artikel::admin_index');
+    // rute admin lainnya...
+});
+
+### 9. Uji Coba Akses
+Akses URL http://localhost:8080/admin/artikel.
+
+Sistem secara otomatis akan mengalihkan (redirect) ke halaman login karena filter mendeteksi user belum terautentikasi.
+Masukkan email dan password yang telah dibuat melalui seeder untuk masuk ke dashboard admin.
+Apabila yang kita masukan Password atau Email salah maka akan muncul seperti ini
+
+![Screenshot Pwsalah](./ci4/assets/gambar_praktikum4/Pwsalah.png)
+
+Apabila Password dan Email benar maka akan langsung di arahkan ke halaman web
+
+![Screenshot Pw Benar](./ci4/assets/gambar_praktikum4/Pwbenar.png)

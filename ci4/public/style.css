@@ -134,3 +134,74 @@ footer {
 .btn:hover {
     opacity: 0.8;
 }
+
+/*form login */
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+#login-wrapper {
+    background: #fff;
+    padding: 40px;
+    width: 450px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Bayangan halus */
+}
+
+/*Sign In */
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 0;
+    color: #444;
+}
+
+/* Label Input */
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+/* Kotak Input */
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Agar padding tidak meluap */
+}
+
+/* Tombol Login Abu-abu (sesuai gambar modul) */
+.btn-primary {
+    background-color: #bcbcbc;
+    border: 1px solid #aaa;
+    padding: 10px 25px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.btn-primary:hover {
+    background-color: #adadad;
+}
+
+/* Pesan Error Alert */
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 10px;
+    margin-bottom: 20px;
+}
