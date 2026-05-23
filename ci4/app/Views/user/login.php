@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="<?= base_url('/style.css'); ?>?v=1.2">
+    
+    <link rel="stylesheet" href="<?= base_url('style.css'); ?>?v=<?= time(); ?>">
 </head>
 <body>
 
@@ -19,19 +20,16 @@
     <?php endif;?>
 
     <form action="" method="post">
-        <!-- Input Email -->
         <div class="mb-3">
             <label for="InputForEmail" class="form-label">Email address</label>
             <input type="email" name="email" class="form-control" id="InputForEmail" value="<?= set_value('email') ?>" required>
         </div>
 
-        <!-- Input Password -->
         <div class="mb-3">
             <label for="InputForPassword" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" id="InputForPassword" required>
         </div>
 
-        <!-- Tombol Login -->
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </div>

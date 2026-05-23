@@ -17,27 +17,21 @@ $routes->get('/tos', 'Page::tos');
 $routes->get('/artikel', 'Artikel::index');
 $routes->get('/artikel/(:any)', 'Artikel::view/$1');
 
-// 3. Route Login (User)
+// 3. Route Login & Logout (User)
 $routes->get('user/login', 'User::login');
 $routes->post('user/login', 'User::login');
-$routes->get('user/logout', 'User::logout'); // Tambahkan ini jika sudah buat fungsi logout
+$routes->get('user/logout', 'User::logout'); 
 
-// 4. Grouping Route Admin (WAJIB PAKAI FILTER AUTH)
-// Semua URL yang diawali /admin/ akan dicek loginnya di sini
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {
-    // localhost:8080/admin/artikel
-    $routes->get('artikel', 'Artikel::admin_index');
-    
-    // localhost:8080/admin/artikel/add
+    $routes->get('artikel', 'Artikel::admin_index', ['as' => 'admin_artikel']);
     $routes->add('artikel/add', 'Artikel::add');
-    
-    // localhost:8080/admin/artikel/edit/(:any)
     $routes->add('artikel/edit/(:any)', 'Artikel::edit/$1');
-    
-    // localhost:8080/admin/artikel/delete/(:any)
     $routes->get('artikel/delete/(:any)', 'Artikel::delete/$1');
+    $routes->post('artikel/add_kategori', 'Artikel::add_kategori');
+    $routes->post('artikel/add_kategori_cepat', 'Artikel::add_kategori_cepat');
+    
+    // TAMBAHKAN BARIS BARU INI:
+    $routes->get('artikel/delete_kategori/(:num)', 'Artikel::delete_kategori/$1');
 });
 
-// Matikan AutoRoute agar keamanan lebih terjamin
 $routes->setAutoRoute(false);
-$routes->get('user/logout', 'User::logout');

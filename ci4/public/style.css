@@ -1,4 +1,18 @@
-/* Reset Dasar */
+/* ==========================================================================
+   1. RESET GLOBAL & VARIABEL WARNA (TEMA: MODERN CORPORATE BLUE)
+   ========================================================================== */
+:root {
+    --primary-color: #0d233a;       /* Biru Navy Utama (Header, Nav Aktif) */
+    --secondary-color: #1e3a5f;     /* Biru Navy Sedang (Tombol Utama) */
+    --accent-color: #00a8cc;        /* Sian/Biru Terang (Aksen Sorotan/Hover) */
+    --body-bg: #f4f6f9;             /* Latar Belakang Halaman (Soft & Bersih) */
+    --container-bg: #ffffff;        /* Latar Belakang Konten Utama */
+    --dark-footer: #111827;         /* Hitam Arang Solid (Footer Kontras Tinggi) */
+    --text-dark: #2d3748;           /* Warna Teks Utama */
+    --text-muted: #718096;          /* Warna Teks Sekunder/Keterangan */
+    --border-color: #e2e8f0;        /* Warna Garis Pembatas/Tabel */
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,202 +20,243 @@
 }
 
 body {
-    font-family: sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--body-bg);
     line-height: 1.6;
+    color: var(--text-dark);
 }
 
+/* Membungkus halaman utama (Non-Login) */
 #container {
     width: 960px;
-    margin: 20px auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 30px auto;
+    background-color: var(--container-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 100vh;
 }
 
-/* Header */
+/* ==========================================================================
+   2. HEADER & NAVIGASI (KONTRAS TINGGI & ELEGAN)
+   ========================================================================== */
 header {
-    padding: 20px;
-    background-color: #333;
-    color: #fff;
+    padding: 25px 20px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-bottom: 3px solid var(--accent-color); /* Garis aksen pemisah */
 }
 
-/* Navigasi */
+header h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
 nav {
-    background-color: #444;
-    padding: 10px;
+    background-color: var(--secondary-color);
+    padding: 5px 10px;
 }
 
 nav a {
-    color: #fff;
+    color: #e2e8f0;
     text-decoration: none;
-    padding: 10px 15px;
+    padding: 10px 18px;
     display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 nav a:hover, nav a.active {
-    background-color: #666;
+    color: #ffffff;
+    background-color: var(--primary-color);
+    box-shadow: inset 0 -3px 0 var(--accent-color); /* Efek garis bawah saat aktif */
 }
 
-/* Layout Wrapper */
+/* ==========================================================================
+   3. LAYOUT WRAPPER (MAIN & SIDEBAR)
+   ========================================================================== */
 #wrapper {
-    overflow: hidden; 
-    padding: 20px;
+    padding: 25px;
+    overflow: hidden; /* Mengatasi float */
 }
-
 
 #main {
     width: 65%;
     float: left;
-    padding-right: 20px;
+    padding-right: 25px;
 }
 
-/* Sidebar (Kanan) */
 #sidebar {
     width: 35%;
     float: right;
-    border-left: 1px solid #ccc;
-    padding-left: 20px;
+    border-left: 1px solid var(--border-color);
+    padding-left: 25px;
 }
 
-.widget-box {
-    margin-bottom: 20px;
-}
-
-.widget-box .title {
-    border-bottom: 2px solid #333;
-    margin-bottom: 10px;
-}
-
-.widget-box ul {
-    list-style: none;
-}
-
-.widget-box ul li a {
-    color: #333;
-    text-decoration: none;
-}
-
-/* Footer */
-footer {
-    clear: both;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 15px;
-}
-
-/*Tabel Admin */
-
+/* ==========================================================================
+   4. TABEL DATA & KOMPONEN FORM INPUT
+   ========================================================================== */
 .table {
     width: 100%;             
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;  
+    background-color: #ffffff;  
 }
 
 .table th, .table td {
-    border: 1px solid #ccc;
-    padding: 15px;           
+    border: 1px solid var(--border-color);
+    padding: 12px 16px;           
     text-align: left;
+    font-size: 14px;
 }
 
 .table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-transform: uppercase; 
+    background-color: #f8fafc;
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-
-.table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
 .table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f1f5f9; /* Efek highlight baris tabel */
 }
 
-
-.btn {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 3px;
-    font-size: 12px;
-}
-.btn-danger {
-    background-color: #dc3545;
-}
-.btn:hover {
-    opacity: 0.8;
-}
-
-/*form login */
-body {
-    background-color: #f8f9fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: sans-serif;
-}
-
-#login-wrapper {
-    background: #fff;
-    padding: 40px;
-    width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Bayangan halus */
-}
-
-/*Sign In */
-h1 {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-top: 0;
-    color: #444;
-}
-
-/* Label Input */
+/* Form Control Global */
 .form-label {
     display: block;
-    margin-bottom: 5px;
-    color: #666;
-}
-
-/* Kotak Input */
-.mb-3 {
-    margin-bottom: 20px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
 }
 
 .form-control {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* Agar padding tidak meluap */
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
 }
 
-/* Tombol Login Abu-abu (sesuai gambar modul) */
-.btn-primary {
-    background-color: #bcbcbc;
-    border: 1px solid #aaa;
-    padding: 10px 25px;
-    color: #333;
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 168, 204, 0.15);
+}
+
+/* Utility tambahan untuk jarak */
+.mb-3 { margin-bottom: 1.2rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+
+/* ==========================================================================
+   5. TOMBOL UTAMA (BUTTONS)
+   ========================================================================== */
+.btn {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
     cursor: pointer;
-    font-weight: bold;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #adadad;
+.btn:hover {
+    background-color: var(--primary-color);
 }
 
-/* Pesan Error Alert */
+.btn-danger {
+    background-color: #e11d48; /* Merah kontras cerah */
+}
+
+.btn-danger:hover {
+    background-color: #be123c;
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   6. HALAMAN KHUSUS LOGIN
+   ========================================================================== */
+/* Tambahkan class ini pada tag <body> khusus di halaman view login kamu */
+.login-body {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    min-height: 100vh;      
+    background-color: var(--body-bg);
+}
+
+/* Wrapper kotak login */
+.login-body #login-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.login-body #login-wrapper h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 24px;
+}
+
+/* Mengesampingkan tombol khusus di form login agar full lebar */
+.login-body .btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    background-color: var(--secondary-color);
+}
+
+/* Notifikasi error login */
 .alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border: 1px solid #ebccd1;
-    padding: 10px;
-    margin-bottom: 20px;
+    background-color: #fff1f2;
+    color: #9f1239;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.2rem;
+    font-size: 0.85rem;
+    border: 1px solid #ffe4e6;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   7. FOOTER (PADAT & SANGAT KONTRAS)
+   ========================================================================== */
+footer {
+    clear: both;
+    background-color: var(--dark-footer);
+    color: #94a3b8; /* Abu-abu terang agar nyaman dibaca di background gelap */
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 13px;
+    border-top: 3px solid var(--accent-color); /* Garis aksen penyeimbang header */
+}
+
+footer strong, footer span {
+    color: #ffffff;
 }
