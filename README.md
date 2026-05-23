@@ -261,3 +261,93 @@ Apabila yang kita masukan Password atau Email salah maka akan muncul seperti ini
 Apabila Password dan Email benar maka akan langsung di arahkan ke halaman web
 
 ![Screenshot Pw Benar](./ci4/assets/gambar_praktikum4/Pwbenar.png)
+
+------------------------------------------------------------------------
+### Praktikum 5: Pagination dan Pencarian (Lab7Web)
+
+Halaman ini menjelaskan langkah-langkah implementasi sistem navigasi (Pagination) dan fitur pencarian data pada aplikasi Admin Portal Berita menggunakan Framework CodeIgniter 4.
+
+### Langkah-langkah Praktikum
+
+### 1. Membuat Pagination
+
+Pagination digunakan untuk memecah tampilan data yang banyak menjadi beberapa halaman agar lebih rapi dan ringan saat dimuat.
+
+Modifikasi Controller Artikel: Buka file app/Controllers/Artikel.php. Pada method admin_index, ubah cara pengambilan data menggunakan fungsi paginate().
+
+'artikel' => $model->paginate(10), // data dibatasi 10 record per halaman
+'pager' => $model->pager,
+
+
+Modifikasi View: Buka file app/Views/artikel/admin_index.php, kemudian tambahkan kode berikut di bawah tabel data untuk menampilkan navigasi halaman.
+
+<?= $pager->links(); ?>
+
+
+### 2. Membuat Fitur Pencarian
+
+Fitur pencarian berfungsi untuk memfilter atau mencari data artikel tertentu berdasarkan judul.
+
+Update Controller: Menambahkan variabel $q untuk menangkap input kata kunci dari form pencarian. Gunakan fungsi like() sebelum memanggil pagination.
+
+$q = $this->request->getVar('q') ?? '';
+$data['artikel'] = $model->like('judul', $q)->paginate(10);
+$data['q'] = $q;
+
+
+Update View (Form Search): Menambahkan form pencarian dengan method="get" di atas tabel pada file admin_index.php.
+
+<form method="get" class="form-search">
+    <input type="text" name="q" value="<?= $q; ?>" placeholder="Cari data">
+    <input type="submit" value="Cari" class="btn btn-primary">
+</form>
+
+
+Update Pager: Memperbarui kode pagination agar hasil pencarian tetap terjaga saat berpindah halaman.
+
+<?= $pager->only(['q'])->links(); ?>
+
+
+### Hasil Akhir (Uji Coba)
+
+Sistem telah berhasil diuji dengan hasil sebagai berikut:
+
+Pagination: Daftar artikel berhasil terbagi menjadi beberapa halaman (10 data per halaman).
+
+Pencarian: Data berhasil difilter sesuai dengan kata kunci yang dimasukkan pada kolom pencarian tanpa merusak sistem navigasi halaman.
+![Screenshot hasil](./ci4/assets/gambar_praktikum5/hasil_praktikum5.png)
+
+
+------------------------------------------------------------------------
+### Praktikum 6: Relasi Table dan Query Builder
+
+### Langkah-langkah Praktikum
+### 1. Membuat Tabel Kategori
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/tabel_kategori.png)
+
+### 2. Membuat Model Kategori
+ Buat file model baru di `app/Models` dengan nama `KategoriModel.php`:
+
+### 3. Memodifikasi beberapa file
+* Modifikasi `ArtikelModel.php` untuk mendefinisikan relasi dengan `KategoriModel`:
+* Modifikasi `Artikel.php` untuk menggunakan model baru dan menampilkan data relasi:
+* Memodifikasi View
+Buka folder view/artikel sesuaikan masing-masing view.
+index.php
+
+### 4. Testing
+**1. Menampilkan daftar artikel dengan nama kategori.**
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/tampilan artikel dan nama kategori.png)
+
+**2. Menambah artikel baru dengan memilih kategori**
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/memilih_kategori.png)
+
+**3. Mengedit artikel dan mengubah kategorinya.**
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+
+**4. Menghapus artikel.**
+Kita memilih untuk menghapus "artikel 5" 
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus artikel.png)
+
+Hasil artikel 5 sudah terhapus
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
