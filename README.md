@@ -337,12 +337,15 @@ index.php
 
 ### 4. Testing
 **1. Menampilkan daftar artikel dengan nama kategori.**
+
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/tampilan artikel dan nama kategori.png)
 
 **2. Menambah artikel baru dengan memilih kategori**
+
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/memilih_kategori.png)
 
 **3. Mengedit artikel dan mengubah kategorinya.**
+
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
 
 **4. Menghapus artikel.**
@@ -350,4 +353,5 @@ Kita memilih untuk menghapus "artikel 5"
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus artikel.png)
 
 Hasil artikel 5 sudah terhapus
+
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
