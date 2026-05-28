@@ -337,24 +337,71 @@ index.php
 
 ### 4. Testing
 **1. Menampilkan daftar artikel dengan nama kategori.**
-
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/tampilan artikel dan nama kategori.png)
 
 **2. Menambah artikel baru dengan memilih kategori**
-
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/memilih_kategori.png)
 
 **3. Mengedit artikel dan mengubah kategorinya.**
-
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\edit_kategori.png)
 
 **4. Menghapus artikel.**
 Kita memilih untuk menghapus "artikel 5" 
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus artikel.png)
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus_artikel.png)
 
 Hasil artikel 5 sudah terhapus
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\hasil_hapus.png)
 
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+--------------------------------------------------------------------------
+### Laporan Praktikum Modul 7 - Upload File Gambar
 
-------------------------------------------------------------------------
-### Praktikum 7: Upload File Gambar
+## 1. Tujuan
+Mengimplementasikan fitur upload file gambar pada form tambah artikel di framework CodeIgniter 4.
+
+---
+
+## 2. Langkah Praktikum dan Penjelasan Kode
+
+### Langkah 1: Membuat Folder Penyimpanan
+Membuat folder fisik bernama `gambar` di dalam direktori `public/` (yaitu `public/gambar/`) untuk menampung file asli yang diunggah.
+
+### Langkah 2: Controller (app/Controllers/Artikel.php)
+Mengubah fungsi `add()` untuk menangkap file gambar, memindahkannya ke folder public, dan menyimpan nama filenya ke database.
+
+```php
+public function add()
+{
+    $validation = \Config\Services::validation();
+    $validation->setRules(['judul' => 'required']);
+    $isDataValid = $validation->withRequest($this->request)->run();
+
+    if ($isDataValid) {
+        $file = $this->request->getFile('gambar'); // Ambil file
+        $file->move(ROOTPATH . 'public/gambar');     // Pindahkan file
+
+        $artikel = new ArtikelModel();
+        $artikel->insert([
+            'judul'       => $this->request->getPost('judul'),
+            'isi'         => $this->request->getPost('isi'),
+            'slug'        => url_title($this->request->getPost('judul')),
+            'id_kategori' => $this->request->getPost('id_kategori'), // Relasi Modul 6
+            'gambar'      => $file->getName(),                       // Nama File Modul 7
+        ]);
+        return redirect('admin/artikel');
+    }
+}'''
+
+### Langkah 3: View Form (app/Views/artikel/form_add.php)
+Menambahkan atribut enctype="multipart/form-data" pada tag form agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
+
+HTML
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="gambar" class="form-label">Upload Gambar Artikel</label>
+        <input type="file" name="gambar" id="gambar" class="form-control" required>
+    </div>
+    
+    </form>
+
+### Hasil 
+![Screenshot hasil prkatikum](./ci4/assets/hasil_praktikum7.png)
