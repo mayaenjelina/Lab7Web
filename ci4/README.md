@@ -343,17 +343,17 @@ index.php
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/memilih_kategori.png)
 
 **3. Mengedit artikel dan mengubah kategorinya.**
-![Screenshot tabel](.ci4\assets\gambar_praktikum6\edit kategori.png)
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\edit_kategori.png)
 
 **4. Menghapus artikel.**
 Kita memilih untuk menghapus "artikel 5" 
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus artikel.png)
+![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus_artikel.png)
 
 Hasil artikel 5 sudah terhapus
-![Screenshot tabel](.ci4\assets\gambar_praktikum6\hasil hapus.png)
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\hasil_hapus.png)
 
 --------------------------------------------------------------------------
-# Laporan Praktikum Modul 7 - Upload File Gambar
+### Laporan Praktikum Modul 7 - Upload File Gambar
 
 ## 1. Tujuan
 Mengimplementasikan fitur upload file gambar pada form tambah artikel di framework CodeIgniter 4.
@@ -404,4 +404,4 @@ HTML
     </form>
 
 ### Hasil 
-![Screenshot Pw Benar](./ci4/assets/hasil praktikum 7.png)
+![Screenshot hasil prkatikum](./ci4/assets/hasil_praktikum7.png)
