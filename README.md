@@ -355,3 +355,6 @@ Kita memilih untuk menghapus "artikel 5"
 Hasil artikel 5 sudah terhapus
 
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+
+------------------------------------------------------------------------
+### Praktikum 7: Upload File Gambar

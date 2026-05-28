@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
                     
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <?= csrf_field(); ?>
                         
                         <div class="mb-3">
@@ -32,6 +32,11 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="gambar" class="form-label fw-medium">Upload Gambar Artikel</label>
+                            <input type="file" name="gambar" id="gambar" class="form-control" required>
+                        </div>
+
                         <div class="mb-4">
                             <label for="isi" class="form-label fw-medium">Isi Artikel</label>
                             <textarea name="isi" id="isi" rows="8" class="form-control" placeholder="Tuliskan isi konten artikel di sini..."></textarea>
@@ -49,7 +54,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalTambahKategori" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalKategoriLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="modalTambahKategori" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalKategoriLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow">
             <div class="modal-header">
@@ -79,9 +84,9 @@
                                         <td class="ps-2 text-dark"><?= $k['nama_kategori']; ?></td>
                                         <td class="text-end pe-2" width="80">
                                             <a href="<?= base_url('admin/artikel/delete_kategori/' . $k['id_kategori']); ?>" 
-                                               class="btn btn-sm btn-outline-danger py-0 px-2" 
-                                               onclick="return confirm('Hapus kategori ini? Artikel dengan kategori ini akan berubah menjadi Umum.');"
-                                               style="font-size: 11px;">
+                                            class="btn btn-sm btn-outline-danger py-0 px-2" 
+                                            onclick="return confirm('Hapus kategori ini? Artikel dengan kategori ini akan berubah menjadi Umum.');"
+                                            style="font-size: 11px;">
                                                 Hapus
                                             </a>
                                         </td>

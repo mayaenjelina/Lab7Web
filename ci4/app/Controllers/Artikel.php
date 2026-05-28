@@ -59,31 +59,37 @@ class Artikel extends BaseController
         return view('artikel/admin_index', $data);
     }
 
-    public function add()
+  public function add()
     {
-        $kategoriModel = new KategoriModel();
-        $model = new ArtikelModel();
-
-        if ($this->request->is('post') && $this->validate([
-            'judul' => 'required',
-            'id_kategori' => 'required|integer'
-        ])) {
-            $model->insert([
-                'judul' => $this->request->getPost('judul'),
-                'isi' => $this->request->getPost('isi'),
-                'slug' => url_title($this->request->getPost('judul'), '-', true),
-                'id_kategori' => $this->request->getPost('id_kategori'),
-                'status' => 1 // Default aktif
+        // validasi data.
+        $validation = \Config\Services::validation();
+        $validation->setRules(['judul' => 'required']);
+        $isDataValid = $validation->withRequest($this->request)->run();
+        
+        if ($isDataValid)
+        {
+            $file = $this->request->getFile('gambar');
+            $file->move(ROOTPATH . 'public/gambar');
+            
+            $artikel = new ArtikelModel();
+            $artikel->insert([
+                'judul'       => $this->request->getPost('judul'),
+                'isi'         => $this->request->getPost('isi'),
+                'slug'        => url_title($this->request->getPost('judul')),
+                'id_kategori' => $this->request->getPost('id_kategori'), // <-- AMAN! Data Modul 6 dimasukkan kembali
+                'gambar'      => $file->getName(),                       // <-- Modul 7 tetap berjalan
             ]);
             
-            return redirect()->to(route_to('admin_artikel'));
+            return redirect('admin/artikel');
         }
 
+        // Ambil data kategori supaya pilihan Dropdown di Form Tambah Artikel tidak kosong/hilang
+        $kategoriModel = new KategoriModel();
         $data['kategori'] = $kategoriModel->findAll();
         $data['title'] = "Tambah Artikel";
+        
         return view('artikel/form_add', $data);
     }
-
     public function add_kategori()
     {
         $kategoriModel = new KategoriModel();

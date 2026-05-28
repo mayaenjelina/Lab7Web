@@ -351,3 +351,58 @@ Kita memilih untuk menghapus "artikel 5"
 
 Hasil artikel 5 sudah terhapus
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+
+--------------------------------------------------------------------------
+### Praktikum 7 - Upload File Gambar
+
+## 1. Tujuan
+Mengimplementasikan fitur upload file gambar pada form tambah artikel di framework CodeIgniter 4.
+
+---
+
+## 2. Langkah Praktikum & Penjelasan Kode
+
+### Langkah 1: Membuat Folder Penyimpanan
+Membuat folder fisik `gambar` di dalam direktori `public/` (`public/gambar/`) untuk menampung file asli yang diunggah.
+
+### Langkah 2: Controller (`app/Controllers/Artikel.php`)
+Mengubah fungsi `add()` untuk menangkap file gambar, memindahkannya ke folder public, dan menyimpan nama filenya ke database.
+
+```php
+public function add()
+{
+    $validation = \Config\Services::validation();
+    $validation->setRules(['judul' => 'required']);
+    $isDataValid = $validation->withRequest($this->request)->run();
+
+    if ($isDataValid) {
+        $file = $this->request->getFile('gambar'); // Ambil file
+        $file->move(ROOTPATH . 'public/gambar');     // Pindahkan file
+
+        $artikel = new ArtikelModel();
+        $artikel->insert([
+            'judul'       => $this->request->getPost('judul'),
+            'isi'         => $this->request->getPost('isi'),
+            'slug'        => url_title($this->request->getPost('judul')),
+            'id_kategori' => $this->request->getPost('id_kategori'), // Relasi Modul 6
+            'gambar'      => $file->getName(),                       // Nama File Modul 7
+        ]);
+        return redirect('admin/artikel');
+    }
+    /* ... load data kategori dan view*/
+}'''
+
+### Langkah 3: View Form (app/Views/artikel/form_add.php)
+Menambahkan atribut enctype="multipart/form-data" pada tag <form> agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
+
+HTML
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="gambar" class="form-label">Upload Gambar Artikel</label>
+        <input type="file" name="gambar" id="gambar" class="form-control" required>
+    </div>
+    
+    </form>
+
+### Hasil
+![Screenshot hasil](./ci4/assets/hasil praktikum 7.png)
