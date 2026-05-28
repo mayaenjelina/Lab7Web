@@ -393,7 +393,7 @@ public function add()
 
 ### Langkah 3: View Form (app/Views/artikel/form_add.php)
 Menambahkan atribut enctype="multipart/form-data" pada tag form agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
-
+```
 HTML
 <form action="" method="post" enctype="multipart/form-data">
     <div class="mb-3">
@@ -402,6 +402,7 @@ HTML
     </div>
     
     </form>
+    ```
 
 ### Hasil 
 ![Screenshot hasil praktikum](./ci4/assets/hasil_praktikum7.png)
