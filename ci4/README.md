@@ -343,29 +343,29 @@ index.php
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/memilih_kategori.png)
 
 **3. Mengedit artikel dan mengubah kategorinya.**
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\edit kategori.png)
 
 **4. Menghapus artikel.**
 Kita memilih untuk menghapus "artikel 5" 
 ![Screenshot tabel](./ci4/assets/gambar_praktikum6/hapus artikel.png)
 
 Hasil artikel 5 sudah terhapus
-![Screenshot tabel](./ci4/assets/gambar_praktikum6/edit kategori.png)
+![Screenshot tabel](.ci4\assets\gambar_praktikum6\hasil hapus.png)
 
 --------------------------------------------------------------------------
-### Praktikum 7 - Upload File Gambar
+# Laporan Praktikum Modul 7 - Upload File Gambar
 
 ## 1. Tujuan
 Mengimplementasikan fitur upload file gambar pada form tambah artikel di framework CodeIgniter 4.
 
 ---
 
-## 2. Langkah Praktikum & Penjelasan Kode
+## 2. Langkah Praktikum dan Penjelasan Kode
 
 ### Langkah 1: Membuat Folder Penyimpanan
-Membuat folder fisik `gambar` di dalam direktori `public/` (`public/gambar/`) untuk menampung file asli yang diunggah.
+Membuat folder fisik bernama `gambar` di dalam direktori `public/` (yaitu `public/gambar/`) untuk menampung file asli yang diunggah.
 
-### Langkah 2: Controller (`app/Controllers/Artikel.php`)
+### Langkah 2: Controller (app/Controllers/Artikel.php)
 Mengubah fungsi `add()` untuk menangkap file gambar, memindahkannya ke folder public, dan menyimpan nama filenya ke database.
 
 ```php
@@ -389,11 +389,10 @@ public function add()
         ]);
         return redirect('admin/artikel');
     }
-    /* ... load data kategori dan view*/
 }'''
 
 ### Langkah 3: View Form (app/Views/artikel/form_add.php)
-Menambahkan atribut enctype="multipart/form-data" pada tag <form> agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
+Menambahkan atribut enctype="multipart/form-data" pada tag form agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
 
 HTML
 <form action="" method="post" enctype="multipart/form-data">
@@ -404,5 +403,5 @@ HTML
     
     </form>
 
-### Hasil
-![Screenshot hasil](./ci4/assets/hasil praktikum 7.png)
+### Hasil 
+![Screenshot Pw Benar](./ci4/assets/hasil praktikum 7.png)
