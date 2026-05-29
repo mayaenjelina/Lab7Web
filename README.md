@@ -389,20 +389,171 @@ public function add()
         ]);
         return redirect('admin/artikel');
     }
-}```
-
+}
+```
 ### Langkah 3: View Form (app/Views/artikel/form_add.php)
 Menambahkan atribut enctype="multipart/form-data" pada tag form agar mendukung upload data biner, serta menambahkan komponen input file Bootstrap.
-```
-HTML
+
+```HTML
 <form action="" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="gambar" class="form-label">Upload Gambar Artikel</label>
         <input type="file" name="gambar" id="gambar" class="form-control" required>
     </div>
-    
     </form>
     ```
 
 ### Hasil 
 ![Screenshot hasil praktikum](./ci4/assets/hasil_praktikum7.png)
+```
+
+-------------------------------------
+## Praktikum 8: AJAX
+
+### 1. Penjelasan
+
+* [cite_start]**Persiapan Library jQuery**: Mendownload file `jquery-3.6.0.min.js` dan menempatkannya ke dalam direktori project pada folder `public/assets/js/`[cite: 45]. [cite_start]Library ini digunakan untuk mempermudah penulisan sintaks AJAX[cite: 44].
+* [cite_start]**Membuat AJAX Controller**: Membuat file controller baru bernama `AjaxController.php` di dalam folder `app/Controllers/`[cite: 48]. [cite_start]Controller ini berfungsi untuk memuat halaman utama, mengambil data artikel dari model dalam bentuk JSON, serta menangani proses penghapusan data[cite: 57, 61, 70, 72, 80].
+* **Konfigurasi Routing**: Mendaftarkan URL routing baru pada file `app/Config/Routes.php` agar request dari JavaScript/jQuery dapat mengenali target URL di controller.
+* [cite_start]**Membuat View AJAX**: Membuat file view di `app/Views/ajax/index.php`[cite: 59, 82]. [cite_start]Di dalam file ini, script jQuery ditulis untuk mengambil data secara otomatis saat halaman dimuat dan menangani aksi hapus data tanpa reload halaman[cite: 97, 107, 111, 139, 141, 150].
+
+### 2. Langkah Praktikum
+
+#### A. Controller (`app/Controllers/AjaxController.php`)
+```php
+<?php
+
+namespace App\Controllers;
+
+use CodeIgniter\Controller;
+use App\Models\ArtikelModel;
+
+class AjaxController extends Controller
+{
+    public function index()
+    {
+        $data = [
+            'title' => 'Data Artikel AJAX'
+        ];
+        return view('ajax/index', $data);
+    }
+
+    public function getData()
+    {
+        $model = new ArtikelModel();
+        $data = $model->findAll();
+        return $this->response->setJSON($data);
+    }
+
+    public function delete($id)
+    {
+        $model = new ArtikelModel();
+        $model->delete($id);
+        
+        $response = [
+            'status' => 'OK',
+            'message' => 'Artikel berhasil dihapus'
+        ];
+        return $this->response->setJSON($response);
+    }
+}
+```
+#### B. Routing (`app/config/routers.php`)
+
+$routes->get('ajax', 'AjaxController::index');
+$routes->get('ajax/getData', 'AjaxController::getData');
+$routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
+
+#### C. View (App/View/ajax/index.php)
+<?= $this->include('template/header'); ?>
+
+<div class="container" style="margin-top: 20px;">
+    <h1>Data Artikel (AJAX)</h1>
+    
+    <table class="table-data" id="artikelTable" border="1" cellpadding="10" cellspacing="0" style="width: 100%; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Judul</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
+<script>
+$(document).ready(function() {
+    
+    function showLoadingMessage() {
+        $('#artikelTable tbody').html('<tr><td colspan="4" style="text-align:center;">Loading data...</td></tr>');
+    }
+
+    function loadData() {
+        showLoadingMessage();
+        $.ajax({
+            url: "<?= base_url('ajax/getData') ?>",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                var tableBody = "";
+                if(data.length === 0) {
+                    tableBody = '<tr><td colspan="4" style="text-align:center;">Tidak ada data artikel.</td></tr>';
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        var row = data[i];
+                        tableBody += '<tr>';
+                        tableBody += '<td>' + row.id + '</td>';
+                        tableBody += '<td>' + row.judul + '</td>';
+                        tableBody += '<td><span class="status">Active</span></td>';
+                        tableBody += '<td>';
+                        tableBody += '<a href="<?= base_url('artikel/edit/') ?>' + row.id + '" class="btn btn-primary" style="margin-right:5px;">Edit</a>';
+                        tableBody += '<a href="#" class="btn btn-danger btn-delete" data-id="' + row.id + '">Delete</a>';
+                        tableBody += '</td>';
+                        tableBody += '</tr>';
+                    }
+                }
+                $('#artikelTable tbody').html(tableBody);
+            }
+        });
+    }
+
+    loadData();
+
+    $(document).on('click', '.btn-delete', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        
+        if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
+            $.ajax({
+                url: "<?= base_url('ajax/delete/') ?>" + id,
+                method: "DELETE",
+                dataType: "json",
+                success: function(response) {
+                    if(response.status === 'OK') {
+                        alert(response.message);
+                        loadData();
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+<?= $this->include('template/footer'); ?>
+```
+### 3. Hasil Praktikum & Screenshot
+
+* **Menampilkan Data Artikel via AJAX**: Halaman sukses memuat data dari database secara dinamis menggunakan AJAX request tanpa interupsi reload halaman.
+  
+  ![Halaman Utama AJAX](/ci4/assets/gambar_praktikum8/tampilan.png)
+
+* **Konfirmasi Hapus Data**: Ketika tombol delete diklik, sistem memunculkan pop-up konfirmasi terlebih dahulu.
+  
+  ![Konfirmasi Hapus](/ci4/assets/gambar_praktikum8/konfirmasi_hapus.png)
+
+* **Berhasil Hapus Tanpa Reload**: Setelah dikonfirmasi, data terhapus dari database dan baris tabel hilang secara instan.
+  
+  ![Setelah Hapus Data](/ci4/assets/gambar_praktikum8/tampilan.png)

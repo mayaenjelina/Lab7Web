@@ -35,3 +35,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 });
 
 $routes->setAutoRoute(false);
+
+$routes->get('ajax', 'AjaxController::index');
+$routes->get('ajax/getData', 'AjaxController::getData');
+$routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
