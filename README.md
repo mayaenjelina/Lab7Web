@@ -412,10 +412,10 @@ Menambahkan atribut enctype="multipart/form-data" pada tag form agar mendukung u
 
 ### 1. Penjelasan
 
-* [cite_start]**Persiapan Library jQuery**: Mendownload file `jquery-3.6.0.min.js` dan menempatkannya ke dalam direktori project pada folder `public/assets/js/`[cite: 45]. [cite_start]Library ini digunakan untuk mempermudah penulisan sintaks AJAX[cite: 44].
-* [cite_start]**Membuat AJAX Controller**: Membuat file controller baru bernama `AjaxController.php` di dalam folder `app/Controllers/`[cite: 48]. [cite_start]Controller ini berfungsi untuk memuat halaman utama, mengambil data artikel dari model dalam bentuk JSON, serta menangani proses penghapusan data[cite: 57, 61, 70, 72, 80].
+* **Persiapan Library jQuery**: Mendownload file `jquery-3.6.0.min.js` dan menempatkannya ke dalam direktori project pada folder `public/assets/js/`.Library ini digunakan untuk mempermudah penulisan sintaks AJAX.
+* **Membuat AJAX Controller**: Membuat file controller baru bernama `AjaxController.php` di dalam folder `app/Controllers/`.Controller ini berfungsi untuk memuat halaman utama, mengambil data artikel dari model dalam bentuk JSON, serta menangani proses penghapusan data.
 * **Konfigurasi Routing**: Mendaftarkan URL routing baru pada file `app/Config/Routes.php` agar request dari JavaScript/jQuery dapat mengenali target URL di controller.
-* [cite_start]**Membuat View AJAX**: Membuat file view di `app/Views/ajax/index.php`[cite: 59, 82]. [cite_start]Di dalam file ini, script jQuery ditulis untuk mengambil data secara otomatis saat halaman dimuat dan menangani aksi hapus data tanpa reload halaman[cite: 97, 107, 111, 139, 141, 150].
+* **Membuat View AJAX**: Membuat file view di `app/Views/ajax/index.php`. Di dalam file ini, script jQuery ditulis untuk mengambil data secara otomatis saat halaman dimuat dan menangani aksi hapus data tanpa reload halaman.
 
 ### 2. Langkah Praktikum
 
@@ -459,14 +459,15 @@ class AjaxController extends Controller
 }
 ```
 #### B. Routing (`app/config/routers.php`)
-
+```php
 $routes->get('ajax', 'AjaxController::index');
 $routes->get('ajax/getData', 'AjaxController::getData');
 $routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
+```
 
 #### C. View (App/View/ajax/index.php)
+```php
 <?= $this->include('template/header'); ?>
-
 <div class="container" style="margin-top: 20px;">
     <h1>Data Artikel (AJAX)</h1>
     
@@ -486,11 +487,9 @@ $routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
 <script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
 <script>
 $(document).ready(function() {
-    
     function showLoadingMessage() {
         $('#artikelTable tbody').html('<tr><td colspan="4" style="text-align:center;">Loading data...</td></tr>');
     }
-
     function loadData() {
         showLoadingMessage();
         $.ajax({
@@ -519,13 +518,10 @@ $(document).ready(function() {
             }
         });
     }
-
     loadData();
-
     $(document).on('click', '.btn-delete', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
-        
         if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
             $.ajax({
                 url: "<?= base_url('ajax/delete/') ?>" + id,
@@ -554,6 +550,6 @@ $(document).ready(function() {
   
   ![Konfirmasi Hapus](/ci4/assets/gambar_praktikum8/konfirmasi_hapus.png)
 
-* **Berhasil Hapus Tanpa Reload**: Setelah dikonfirmasi, data terhapus dari database dan baris tabel hilang secara instan.
+* **Berhasil Hapus Tanpa Reload**: Setelah dikonfirmasi, data terhapus dari database dan baris tabel hilang secara instan(Table Artikel kesekian).
   
-  ![Setelah Hapus Data](/ci4/assets/gambar_praktikum8/tampilan.png)
+  ![Setelah Hapus Data](/ci4/assets/gambar_praktikum8/hasil.png)
