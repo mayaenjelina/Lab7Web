@@ -7,6 +7,8 @@ use App\Models\KategoriModel;
 
 class Artikel extends BaseController
 {
+
+// admin index ajax
     public function index()
     {
         $title = 'Daftar Artikel';
@@ -16,48 +18,115 @@ class Artikel extends BaseController
     }
 
     public function admin_index()
-    {
-        $model = new ArtikelModel();
-        
-        // Ambil data pencarian dan filter dari URL
-        $q = $this->request->getVar('q') ?? '';
-        $kategori_id = $this->request->getVar('kategori_id') ?? '';
+{
+    $title = 'Daftar Artikel (Admin)';
+    $model = new \App\Models\ArtikelModel();
+    
+    // Ambil parameter filter & sorting dari request
+    $q = $this->request->getVar('q') ?? '';
+    $kategori_id = $this->request->getVar('kategori_id') ?? '';
+    $sort = $this->request->getVar('sort') ?? 'terbaru';
+    $page = $this->request->getVar('page') ?? 1;
 
-        // 1. Ambil object Query Builder bawaan dari model artikel
-        $builder = $model->builder();
+    // Inisialisasi Builder Query dengan Join Tabel Kategori
+    $builder = $model->table('artikel')
+                    ->select('artikel.*, kategori.nama_kategori')
+                    ->join('kategori', 'kategori.id_kategori = artikel.id_kategori', 'left');
 
-        // 2. Tentukan kolom yang di-select dan lakukan Join tabel kategori
-        $builder->select('artikel.*, kategori.nama_kategori');
-        $builder->join('kategori', 'kategori.id_kategori = artikel.id_kategori', 'left');
-
-        // 3. Filter Pencarian Judul (Jika ada input cari)
-        if (!empty($q)) {
-            $builder->like('artikel.judul', $q);
-        }
-
-        // 4. Filter Kategori (Jika kategori dipilih)
-        if (!empty($kategori_id)) {
-            $builder->where('artikel.id_kategori', $kategori_id);
-        }
-
-        // 5. Urutkan berdasarkan ID terbesar (Artikel terbaru di paling atas)
-        $builder->orderBy('artikel.id', 'DESC');
-
-        // 6. Eksekusi Paginasi langsung menggunakan data builder (Cara paling aman CI4)
-        $data['artikel'] = $model->paginate(10, 'default');
-        $data['pager'] = $model->pager;
-
-        // Ambil data kategori untuk isi Dropdown Filter Pencarian
-        $kategoriModel = new KategoriModel();
-        $data['kategori'] = $kategoriModel->findAll();
-
-        // Kirim data pendukung ke View
-        $data['q'] = $q;
-        $data['kategori_id'] = $kategori_id;
-        $data['title'] = "Daftar Artikel Admin";
-
-        return view('artikel/admin_index', $data);
+    // Filter Pencarian Judul
+    if ($q != '') {
+        $builder->like('artikel.judul', $q);
     }
+
+    // Filter Kategori
+    if ($kategori_id != '') {
+        $builder->where('artikel.id_kategori', $kategori_id);
+    }
+
+    // Fitur Tugas Mandiri: Sorting (Pengurutan)
+    if ($sort == 'judul_asc') {
+        $builder->orderBy('artikel.judul', 'ASC');
+    } elseif ($sort == 'judul_desc') {
+        $builder->orderBy('artikel.judul', 'DESC');
+    } else {
+        $builder->orderBy('artikel.id', 'DESC'); // Default terbaru
+    }
+
+    // Ambil data artikel menggunakan Pagination bawaan CI4
+    $artikel = $builder->paginate(10, 'default', $page);
+    $pager = $model->pager;
+
+    // Menyiapkan array links secara manual agar JavaScript bisa membaca data dengan mudah
+    $linksArray = [];
+    if ($pager) {
+        $linksArray = $pager->getDetails()['links'] ?? [];
+    }
+
+    // Susun data untuk dilempar ke View atau JSON AJAX
+    $data = [
+        'title'       => $title,
+        'q'           => $q,
+        'kategori_id' => $kategori_id,
+        'sort'        => $sort,
+        'artikel'     => $artikel,
+        'pager'       => [
+            'currentPage' => $pager ? $pager->getCurrentPage() : 1,
+            'links'       => $linksArray
+        ]
+    ];
+    if ($this->request->isAJAX()) {
+        return $this->response->setJSON($data);
+    } 
+    
+
+    $kategoriModel = new \App\Models\KategoriModel();
+    $data['kategori'] = $kategoriModel->findAll();
+    return view('artikel/admin_index', $data);
+}
+// admin index awal
+    // public function admin_index()
+    // {
+    //     $model = new ArtikelModel();
+        
+    //     // Ambil data pencarian dan filter dari URL
+    //     $q = $this->request->getVar('q') ?? '';
+    //     $kategori_id = $this->request->getVar('kategori_id') ?? '';
+
+    //     // 1. Ambil object Query Builder bawaan dari model artikel
+    //     $builder = $model->builder();
+
+    //     // 2. Tentukan kolom yang di-select dan lakukan Join tabel kategori
+    //     $builder->select('artikel.*, kategori.nama_kategori');
+    //     $builder->join('kategori', 'kategori.id_kategori = artikel.id_kategori', 'left');
+
+    //     // 3. Filter Pencarian Judul (Jika ada input cari)
+    //     if (!empty($q)) {
+    //         $builder->like('artikel.judul', $q);
+    //     }
+
+    //     // 4. Filter Kategori (Jika kategori dipilih)
+    //     if (!empty($kategori_id)) {
+    //         $builder->where('artikel.id_kategori', $kategori_id);
+    //     }
+
+    //     // 5. Urutkan berdasarkan ID terbesar (Artikel terbaru di paling atas)
+    //     $builder->orderBy('artikel.id', 'DESC');
+
+    //     // 6. Eksekusi Paginasi langsung menggunakan data builder (Cara paling aman CI4)
+    //     $data['artikel'] = $model->paginate(10, 'default');
+    //     $data['pager'] = $model->pager;
+
+    //     // Ambil data kategori untuk isi Dropdown Filter Pencarian
+    //     $kategoriModel = new KategoriModel();
+    //     $data['kategori'] = $kategoriModel->findAll();
+
+    //     // Kirim data pendukung ke View
+    //     $data['q'] = $q;
+    //     $data['kategori_id'] = $kategori_id;
+    //     $data['title'] = "Daftar Artikel Admin";
+
+    //     return view('artikel/admin_index', $data);
+    // }
 
   public function add()
     {
@@ -80,7 +149,7 @@ class Artikel extends BaseController
                 'gambar'      => $file->getName(),                       // <-- Modul 7 tetap berjalan
             ]);
             
-            return redirect('admin/artikel');
+            return redirect()->to('admin/artikel')->with('success', 'Artikel berhasil disimpan!');
         }
 
         // Ambil data kategori supaya pilihan Dropdown di Form Tambah Artikel tidak kosong/hilang
