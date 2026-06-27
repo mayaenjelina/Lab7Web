@@ -9,6 +9,7 @@ use App\Models\ArtikelModel;
 class Post extends ResourceController
 {
     use ResponseTrait;
+
     // all users
     public function index()
     {
@@ -16,6 +17,7 @@ class Post extends ResourceController
         $data['artikel'] = $model->orderBy('id', 'DESC')->findAll();
         return $this->respond($data);
     }
+
     // create
     public function create()
     {
@@ -34,6 +36,7 @@ class Post extends ResourceController
         ];
         return $this->respondCreated($response);
     }
+
     // single user
     public function show($id = null)
     {
@@ -45,11 +48,16 @@ class Post extends ResourceController
             return $this->failNotFound('Data tidak ditemukan.');
         }
     }
+
     // update
+    // PERBAIKAN: $id diambil dari parameter URL (/post/{id}), TIDAK ditimpa
+    // oleh nilai dari Body. Sebelumnya ada baris "$id = $this->request->getVar('id');"
+    // yang menyebabkan $id menjadi null jika field 'id' tidak dikirim di Body,
+    // sehingga query UPDATE gagal (error: "Updates are not allowed unless they
+    // contain a where or like clause").
     public function update($id = null)
     {
         $model = new ArtikelModel();
-        $id = $this->request->getVar('id');
         $data = [
             'judul' => $this->request->getVar('judul'),
             'isi' => $this->request->getVar('isi'),
@@ -64,11 +72,12 @@ class Post extends ResourceController
         ];
         return $this->respond($response);
     }
+
     // delete
     public function delete($id = null)
     {
         $model = new ArtikelModel();
-        $data = $model->where('id', $id)->delete($id);
+        $data = $model->where('id', $id)->first();
         if ($data) {
             $model->delete($id);
             $response = [

@@ -1,10 +1,10 @@
 # LAPORAN PRAKTIKUM PEMROGRAMAN WEB 2
 ## Praktikum 1: PHP Framework (CodeIgniter 4)
 
-**Nama** : Maya Enjelina  
-**NIM** : 312410378  
-**Kelas** : I243B  
-**Repository** : Lab7Web
+**Nama**         : Maya Enjelina  
+**NIM**          : 312410378  
+**Kelas**        : I243B  
+**Repository**   : Lab7Web
 
 ---
 
@@ -553,3 +553,322 @@ $(document).ready(function() {
 * **Berhasil Hapus Tanpa Reload**: Setelah dikonfirmasi, data terhapus dari database dan baris tabel hilang secara instan(Table Artikel kesekian).
   
   ![Setelah Hapus Data](/ci4/assets/gambar_praktikum8/hasil.png)
+
+-------------------------------------
+# Laporan Praktikum 9: Implementasi AJAX Pagination dan Search
+
+Repository ini merupakan kelanjutan dari tugas praktikum Pemrograman Web 2 (**Lab7Web** / `lab7_php_ci`). Pada modul ini, dilakukan implementasi fitur pencarian (*search*) dan penomoran halaman (*pagination*) berbasis AJAX menggunakan framework CodeIgniter 4 dan jQuery.
+
+---
+
+## 🎯 Tujuan Praktikum
+1. Memahami konsep dasar AJAX untuk proses *pagination* dan *search*.
+2. Mengimplementasikan pagination dan search menggunakan AJAX dalam CodeIgniter 4.
+3. Meningkatkan performa dan *User Experience* (UX) aplikasi web dengan meminimalisir *reload* halaman penuh.
+
+---
+
+## 🛠️ Langkah-Langkah & Implementasi Kode
+
+### 1. Modifikasi Controller Artikel (`app/Controllers/Artikel.php`)
+Mengubah method `admin_index()` agar mampu mendeteksi request AJAX (`$this->request->isAJAX()`). Jika request berupa AJAX, data dikembalikan dalam format JSON. Jika request biasa, view akan dimuat seperti biasa.
+
+```php
+public function admin_index()
+{
+    $title = 'Daftar Artikel (Admin)';
+    $model = new ArtikelModel();
+    
+    $q = $this->request->getVar('q') ?? '';
+    $kategori_id = $this->request->getVar('kategori_id') ?? '';
+    $page = $this->request->getVar('page') ?? 1;
+    
+    $builder = $model->table('artikel')
+                     ->select('artikel.*, kategori.nama_kategori')
+                     ->join('kategori', 'kategori.id_kategori = artikel.id_kategori');
+                     
+    if ($q != '') {
+        $builder->like('artikel.judul', $q);
+    }
+    if ($kategori_id != '') {
+        $builder->where('artikel.id_kategori', $kategori_id);
+    }
+    
+    $artikel = $builder->paginate(10, 'default', $page);
+    $pager = $model->pager;
+    
+    $data = [
+        'title' => $title,
+        'q' => $q,
+        'kategori_id' => $kategori_id,
+        'artikel' => $artikel,
+        'pager' => $pager
+    ];
+    
+    if ($this->request->isAJAX()) {
+        return $this->response->setJSON($data);
+    } else {
+        $kategoriModel = new KategoriModel();
+        $data['kategori'] = $kategoriModel->findAll();
+        return view('artikel/admin_index', $data);
+    }
+}
+```
+### 2. Modifikasi View (app/Views/artikel/admin_index.php)
+Mengubah struktur view dengan menghapus render tabel statis dari PHP, lalu menggantinya dengan penampung kosong (#article-container dan #pagination-container). Data kemudian dirender secara dinamis via jQuery AJAX.
+
+```php
+<?= $this->include('template/admin_header'); ?>
+<h2><?= $title; ?></h2>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form id="search-form" class="form-inline">
+            <input type="text" name="q" id="search-box" value="<?= $q; ?>" placeholder="Cari judul artikel" class="form-control mr-2">
+            <select name="kategori_id" id="category-filter" class="form-control mr-2">
+                <option value="">Semua Kategori</option>
+                <?php foreach ($kategori as $k): ?>
+                    <option value="<?= $k['id_kategori']; ?>" <?= ($kategori_id == $k['id_kategori']) ? 'selected' : ''; ?>><?= $k['nama_kategori']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="submit" value="Cari" class="btn btn-primary">
+        </form>
+    </div>
+</div>
+
+<div id="loading" style="display:none;" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div id="article-container"></div>
+<div id="pagination-container"></div>
+
+<script src="[https://code.jquery.com/jquery-3.6.0.min.js](https://code.jquery.com/jquery-3.6.0.min.js)"></script>
+<script>
+$(document).ready(function() {
+    const articleContainer = $('#article-container');
+    const paginationContainer = $('#pagination-container');
+    const searchForm = $('#search-form');
+    const searchBox = $('#search-box');
+    const categoryFilter = $('#category-filter');
+    const loading = $('#loading');
+
+    const fetchData = (url) => {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            beforeSend: function() {
+                loading.show();
+                articleContainer.html('');
+                paginationContainer.html('');
+            },
+            success: function(data) {
+                loading.hide();
+                renderArticles(data.artikel);
+                renderPagination(data.pager, data.q, data.kategori_id);
+            }
+        });
+    };
+
+    const renderArticles = (articles) => {
+        let html = '<table class="table">';
+        html += '<thead><tr><th>ID</th><th>Judul</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+        
+        if (articles.length > 0) {
+            articles.forEach(article => {
+                html += `<tr>
+                    <td>${article.id}</td>
+                    <td>
+                        <b>${article.judul}</b>
+                        <p><small>${article.isi.substring(0, 50)}...</small></p>
+                    </td>
+                    <td>${article.nama_kategori}</td>
+                    <td>${article.status}</td>
+                    <td>
+                        <a class="btn btn-sm btn-info" href="/admin/artikel/edit/${article.id}">Ubah</a>
+                        <a class="btn btn-sm btn-danger" onclick="return confirm('Yakin menghapus data?');" href="/admin/artikel/delete/${article.id}">Hapus</a>
+                    </td>
+                </tr>`;
+            });
+        } else {
+            html += '<tr><td colspan="5" class="text-center">Tidak ada data.</td></tr>';
+        }
+        html += '</tbody></table>';
+        articleContainer.html(html);
+    };
+
+    const renderPagination = (pager, q, kategori_id) => {
+        let html = '<nav><ul class="pagination">';
+        if(pager && pager.links) {
+            pager.links.forEach(link => {
+                let url = link.url ? `${link.url}&q=${q}&kategori_id=${kategori_id}` : '#';
+                html += `<li class="page-item ${link.active ? 'active' : ''}">
+                    <a class="page-link" href="${url}">${link.title}</a>
+                </li>`;
+            });
+        }
+        html += '</ul></nav>';
+        paginationContainer.html(html);
+    };
+
+    // Event link pagination klik (AJAX)
+    $(document).on('click', '.pagination .page-link', function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        if (url !== '#') {
+            fetchData(url);
+        }
+    });
+
+    searchForm.on('submit', function(e) {
+        e.preventDefault();
+        const q = searchBox.val();
+        const kategori_id = categoryFilter.val();
+        fetchData(`/admin/artikel?q=${q}&kategori_id=${kategori_id}`);
+    });
+
+    categoryFilter.on('change', function() {
+        searchForm.trigger('submit');
+    });
+
+    // Initial load
+    fetchData('/admin/artikel');
+});
+</script>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+![Setelah Hapus Data](/ci4/assets/gambar_praktikum9/hasil9.png)
+
+-----------------------
+# Laporan Praktikum 10 — REST API (CodeIgniter 4)
+
+
+## 📖 Pendahuluan
+
+Praktikum ini membahas pembuatan **REST API** menggunakan **CodeIgniter 4**, dengan memanfaatkan `ResourceController` untuk menyediakan operasi **CRUD (Create, Read, Update, Delete)** terhadap data artikel.
+
+**REST (Representational State Transfer)** adalah gaya arsitektur API yang mengatur komunikasi antara *client* dan *server* melalui HTTP, di mana setiap **method HTTP** punya fungsi berbeda:
+
+| Method | Fungsi |
+|---|---|
+| `GET` | Mengambil/menampilkan data |
+| `POST` | Menambahkan data baru |
+| `PUT` / `PATCH` | Mengubah data yang sudah ada |
+| `DELETE` | Menghapus data |
+
+Data yang dikirim maupun diterima berformat **JSON**, sehingga API ini nantinya bisa diintegrasikan dengan platform/framework apapun (misalnya frontend Vue.js, React, atau aplikasi mobile).
+
+---
+
+## 🛠️ Langkah-Langkah Praktikum
+
+### 1. Persiapan
+
+Project dilanjutkan dari praktikum sebelumnya pada folder `lab11_php_ci/ci4`. Aplikasi **Postman** digunakan sebagai REST Client untuk menguji API.
+
+### 2. Memanfaatkan Model
+
+`ArtikelModel` yang sudah dibuat pada praktikum sebelumnya digunakan kembali, dengan konfigurasi:
+
+```php
+protected $table = 'artikel';
+protected $primaryKey = 'id';
+protected $useAutoIncrement = true;
+protected $allowedFields = ['judul', 'isi', 'status', 'slug', 'gambar', 'id_kategori'];
+```
+
+### 3. Membuat REST Controller (`Post.php`)
+
+Dibuat file `app/Controllers/Post.php` yang berisi 5 method utama, masing-masing menangani satu operasi CRUD:
+
+- **`index()`** — menampilkan seluruh data artikel (`GET /post`)
+- **`create()`** — menambahkan data artikel baru (`POST /post`)
+- **`show($id)`** — menampilkan satu data spesifik berdasarkan ID (`GET /post/{id}`)
+- **`update($id)`** — mengubah data berdasarkan ID (`PUT /post/{id}`)
+- **`delete($id)`** — menghapus data berdasarkan ID (`DELETE /post/{id}`)
+
+
+### 4. Membuat Routing REST API
+
+Pada `app/Config/Routes.php`, ditambahkan satu baris kode:
+
+```php
+$routes->resource('post');
+```
+
+Satu baris ini otomatis menghasilkan banyak endpoint sekaligus (GET, POST, PUT, PATCH, DELETE) untuk resource `post`. Hal ini dapat diverifikasi melalui command:
+
+```bash
+php spark routes
+```
+
+> 📸 **[Screenshot hasil `php spark routes` menampilkan daftar endpoint `post`]**
+
+![Route](/ci4/assets/praktikum10/Route.png)
+
+
+---
+
+## 🧪 Hasil Pengujian API (Postman)
+
+### A. GET — Menampilkan Semua Data
+
+**Endpoint:** `GET http://localhost/lab11_php_ci/ci4/public/post`
+
+Hasil: status **200 OK**, response berupa array JSON seluruh data artikel.
+
+> 📸 **[Screenshot hasil testing GET semua data]**
+
+![semua data](/ci4/assets/praktikum10/semua_data.png)
+
+
+### B. GET — Menampilkan Data Spesifik
+
+**Endpoint:** `GET http://localhost/lab11_php_ci/ci4/public/post/{id}`
+
+Hasil: status **200 OK**, response berupa satu objek JSON sesuai ID yang diminta.
+
+> 📸 **[Screenshot hasil testing GET data spesifik]**
+
+![semua data](/ci4/assets/praktikum10/data_spesifik.png)
+
+
+### C. POST — Menambahkan Data
+
+**Endpoint:** `POST http://localhost/lab11_php_ci/ci4/public/post`
+**Body (x-www-form-urlencoded):** `judul`, `isi`
+
+Hasil: status **201 Created**, response pesan sukses data berhasil ditambahkan.
+
+
+### D. PUT — Mengubah Data
+
+**Endpoint:** `PUT http://localhost/lab11_php_ci/ci4/public/post/{id}`
+**Body (x-www-form-urlencoded):** `judul`, `isi`
+
+Hasil: status **200 OK**, response pesan sukses data berhasil diubah.
+
+
+### E. DELETE — Menghapus Data
+
+**Endpoint:** `DELETE http://localhost/lab11_php_ci/ci4/public/post/{id}`
+
+Hasil: status **200 OK**, response pesan sukses data berhasil dihapus.
+
+> 📸 **[Screenshot hasil testing DELETE hapus data]**
+
+![semua data](/ci4/assets/praktikum10/delete.png)
+
+
+---
+
+## 💡 Kesimpulan
+
+Melalui praktikum ini, dipahami bahwa pembuatan REST API dengan CodeIgniter 4 dapat dilakukan secara ringkas menggunakan `ResourceController`, di mana satu baris route (`$routes->resource('post')`) sudah menghasilkan seluruh endpoint CRUD standar. Pengujian menggunakan Postman membantu memverifikasi setiap endpoint bekerja sesuai harapan, sekaligus membantu menemukan bug logika pada kode (seperti kesalahan penimpaan variabel `$id`) yang tidak akan terlihat hanya dengan membaca kode tanpa diuji langsung.
