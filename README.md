@@ -872,3 +872,318 @@ Hasil: status **200 OK**, response pesan sukses data berhasil dihapus.
 ## 💡 Kesimpulan
 
 Melalui praktikum ini, dipahami bahwa pembuatan REST API dengan CodeIgniter 4 dapat dilakukan secara ringkas menggunakan `ResourceController`, di mana satu baris route (`$routes->resource('post')`) sudah menghasilkan seluruh endpoint CRUD standar. Pengujian menggunakan Postman membantu memverifikasi setiap endpoint bekerja sesuai harapan, sekaligus membantu menemukan bug logika pada kode (seperti kesalahan penimpaan variabel `$id`) yang tidak akan terlihat hanya dengan membaca kode tanpa diuji langsung.
+
+------------------
+## Praktikum 11 - VueJS
+
+### Tujuan
+1. Memahami konsep dasar API
+2. Memahami konsep dasar Framework VueJS
+3. Membuat Frontend API menggunakan Framework VueJS 3
+
+---
+
+### Langkah 1 - Persiapan Struktur Folder
+
+Buat folder `lab8_vuejs` di dalam htdocs dengan struktur berikut:
+lab8_vuejs/
+
+│   index.html
+
+└───assets/
+
+├───css/
+
+│   style.css
+
+└───js/
+
+app.js
+
+---
+
+### Langkah 2 - Membuat index.html
+
+Buat file `index.html` yang berisi struktur halaman Vue.js dengan:
+- Load library Vue.js dan Axios via CDN
+- Tabel untuk menampilkan daftar artikel menggunakan `v-for`
+- Tombol Tambah Data
+- Modal form untuk tambah dan ubah data menggunakan `v-if`
+
+
+---
+
+### Langkah 3 - Membuat app.js
+
+Buat file `app.js` yang berisi logika aplikasi Vue.js:
+- `loadData()` — mengambil data artikel dari API menggunakan Axios GET
+- `tambah()` — menampilkan form kosong untuk tambah data baru
+- `edit()` — mengisi form dengan data yang dipilih untuk diubah
+- `hapus()` — menghapus data artikel berdasarkan ID
+- `saveData()` — menyimpan data baru (POST) atau mengupdate data (PUT)
+- `statusText()` — mengubah nilai status (0/1) menjadi teks (Draft/Publish)
+
+---
+
+### Langkah 4 - Membuat style.css
+
+Buat file `style.css` untuk styling tampilan tabel, form, modal, dan tombol.
+
+---
+
+### Langkah 5 - Menampilkan Data Artikel
+
+Buka browser ke `localhost/lab11_php_ci/lab8_vuejs/`. Data artikel berhasil ditampilkan dari API CI4.
+
+![semua data](/ci4/assets/pert11/tampilan.png)
+
+---
+
+### Langkah 6 - Tambah Data
+
+Klik tombol **Tambah Data**, isi form judul, isi, dan status, lalu klik Simpan. Data baru berhasil ditambahkan dan muncul di tabel.
+
+![semua data](/ci4/assets/pert11/tambah.png)
+
+---
+
+### Langkah 7 - Ubah Data
+
+Klik tombol **Edit** pada salah satu artikel. Form terbuka dengan data yang sudah terisi. Ubah data lalu klik Simpan. Data berhasil diperbarui.
+
+![semua data](/ci4/assets/pert11/ubah.png)
+
+---
+
+### Langkah 8 - Hapus Data
+
+Klik tombol **Hapus** pada salah satu artikel. Muncul konfirmasi, setelah diklik OK data berhasil dihapus dari tabel.
+
+![semua data](/ci4/assets/pert11/hapus.png)
+
+---
+
+### Kesimpulan
+
+Pada praktikum ini telah berhasil dibuat aplikasi frontend menggunakan Vue.js 3 yang terkoneksi dengan REST API CodeIgniter 4. Aplikasi mendukung operasi CRUD lengkap yaitu menampilkan, menambah, mengubah, dan menghapus data artikel melalui Axios untuk komunikasi HTTP.
+
+----------------
+
+## Praktikum 12 - VueJS Komponen dan Routing (SPA)
+
+### Tujuan
+1. Memahami konsep komponen pada Framework VueJS
+2. Memahami konsep Client-Side Routing untuk membangun SPA
+3. Mengimplementasikan komponen dan routing menggunakan Vue Router
+
+---
+
+### Langkah 1 - Tambah Library Vue Router
+
+Tambahkan CDN Vue Router di index.html:
+`<script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>`
+
+
+---
+
+### Langkah 2 - Buat Komponen Home.js
+
+Buat file `assets/js/components/Home.js` berisi halaman beranda.
+
+
+---
+
+### Langkah 3 - Buat Komponen Artikel.js
+
+Pindahkan logika CRUD dari app.js ke komponen `Artikel.js`.
+
+
+---
+
+### Langkah 4 - Buat Komponen About.js (Tugas)
+
+Buat komponen About berisi profil singkat.
+
+
+---
+
+### Langkah 5 - Konfigurasi Vue Router di app.js
+
+Daftarkan semua rute dan mount aplikasi dengan router.
+
+
+---
+
+### Langkah 6 - Update index.html
+
+Tambahkan `<router-link>` untuk navigasi dan `<router-view>` untuk konten dinamis.
+
+---
+
+### Langkah 7 - Hasil Running
+
+![beranda](/ci4/assets/pert12/beranda.png)
+
+![kelola](/ci4/assets/pert12/kelola.png)
+
+![About](/ci4/assets/pert12/about.png)
+
+---
+
+### Kesimpulan
+
+Pada praktikum ini berhasil diimplementasikan Single Page Application (SPA) 
+menggunakan Vue Router. Aplikasi dipecah menjadi komponen-komponen terpisah 
+(Home, Artikel, About) sehingga kode lebih modular dan mudah dikelola. 
+Perpindahan halaman terjadi tanpa reload browser berkat Client-Side Routing.
+
+------------
+## Praktikum 13 - VueJS Autentikasi dan Navigation Guards (SPA Security)
+
+### Tujuan
+1. Memahami konsep keamanan dan pembatasan hak akses rute pada sisi klien
+2. Memahami konsep Navigation Guards (beforeEach) pada Vue Router
+3. Membuat API Endpoint autentikasi pada backend CodeIgniter 4
+4. Mengimplementasikan modul Login dan proteksi halaman admin pada SPA
+
+---
+
+### Langkah 1 - Membuat Auth Controller di CI4
+
+Buat file `app/Controllers/Api/Auth.php` yang berisi logika validasi 
+kredensial user dari database menggunakan UserModel, lalu mengembalikan 
+token jika login berhasil atau error 401 jika gagal.
+
+```
+<?php
+namespace App\Controllers\Api;
+use CodeIgniter\RESTful\ResourceController;
+use App\Models\UserModel;
+
+class Auth extends ResourceController
+{
+    protected $format = 'json';
+
+    public function login()
+    {
+        $username = $this->request->getVar('username');
+        $password = $this->request->getVar('password');
+
+        $model = new UserModel();
+        $user = $model->where('username', $username)
+                ->orWhere('useremail', $username)
+                    ->first();
+
+        if ($user) {
+            if ($password === $user['userpassword'] || 
+                password_verify($password, $user['userpassword'])) {
+                return $this->respond([
+                    'status' => 200,
+                    'error' => null,
+                    'messages' => 'Login Berhasil',
+                    'data' => [
+                        'id' => $user['id'],
+                        'username' => $user['username'],
+                        'token' => base64_encode("TOKEN-SECRET-" . $user['username'])
+                    ]
+                ], 200);
+            }
+        }
+
+        return $this->failUnauthorized('Username atau Password yang Anda masukkan salah.');
+    }
+}
+```
+---
+
+### Langkah 2 - Mendaftarkan Route API Login
+
+Tambahkan route POST di `app/Config/Routes.php`:
+`$routes->post('api/login', 'Api\Auth::login');`
+
+```
+$routes->post('api/login', 'Api\Auth::login');
+```
+
+---
+
+### Langkah 3 - Membuat Komponen Login.js
+
+Buat file `assets/js/components/Login.js` berisi form login yang 
+mengirim kredensial ke API backend menggunakan Axios POST, lalu 
+menyimpan token ke localStorage jika berhasil.
+
+---
+
+### Langkah 4 - Konfigurasi Navigation Guards di app.js
+
+Tambahkan `meta: { requiresAuth: true }` pada rute artikel dan about, 
+serta fungsi `router.beforeEach()` yang mengecek localStorage sebelum 
+mengizinkan akses ke rute yang diproteksi.
+
+
+---
+
+### Langkah 5 - Update index.html
+
+Tambahkan script Login.js dan ubah navbar agar menampilkan Login/Logout 
+secara dinamis menggunakan `v-if` dan `v-else`.
+
+
+---
+
+### Langkah 6 - Tambah CSS Form Login
+
+Tambahkan styling untuk login-container, login-box, form-group, 
+btn-login, dan error-msg di style.css.
+
+
+---
+
+### Pengujian Skenario A - Akses Ditolak (Belum Login)
+
+Saat belum login, klik menu Kelola Artikel. Sistem menampilkan alert 
+"Akses Ditolak!" dan mengarahkan ke halaman login.
+
+
+![semua data](/ci4/assets/pert13/ditolak.png)
+
+![semua data](/ci4/assets/pert13/)
+---
+
+### Pengujian Skenario B - Login Berhasil
+
+Masukkan username dan password yang valid. Sistem memvalidasi ke API 
+backend, menyimpan token di localStorage, dan mengarahkan ke halaman 
+Kelola Artikel. Navbar berubah dari Login menjadi Logout.
+
+![semua data](/ci4/assets/pert13/kelola.png)
+
+
+![semua data](/ci4/assets/pert13/about.png)
+
+
+---
+
+
+### Analisis router.beforeEach dan Axios HTTP Post
+
+**router.beforeEach** adalah Navigation Guard yang berjalan setiap kali 
+terjadi perpindahan rute. Fungsi ini mengecek properti `meta.requiresAuth` 
+pada rute tujuan dan status `isLoggedIn` di localStorage. Jika rute 
+membutuhkan autentikasi namun user belum login, akses diblokir dan 
+diarahkan ke halaman login.
+
+**Axios HTTP Post** digunakan untuk mengirim data kredensial (username 
+dan password) ke API endpoint backend CI4 secara asinkron. Jika response 
+status 200, token disimpan ke localStorage. Jika gagal, pesan error 
+ditampilkan di form.
+
+---
+
+### Kesimpulan
+
+Pada praktikum ini berhasil diimplementasikan sistem autentikasi dan 
+keamanan rute pada SPA menggunakan Vue Router Navigation Guards. Halaman 
+Kelola Artikel dan About hanya dapat diakses oleh pengguna yang sudah 
+login, dibuktikan dengan adanya token di localStorage browser.
