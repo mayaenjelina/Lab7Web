@@ -38,6 +38,7 @@ class Filters extends BaseFilters
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
         'auth'          => \App\Filters\Auth::class,
+        'apiauth'        => \App\Filters\ApiAuthFilter::class,
 
     ];
 

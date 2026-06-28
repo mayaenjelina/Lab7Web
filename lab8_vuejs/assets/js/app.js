@@ -3,6 +3,39 @@ const { createRouter, createWebHashHistory } = VueRouter;
 
 const apiUrl = 'http://localhost/lab11_php_ci/ci4/public';
 
+// =============================================
+// AXIOS INTERCEPTORS — Penyuntik Token Otomatis
+// =============================================
+
+// Request interceptor — tambah token ke setiap request
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor — tangkap error 401 global
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      alert('Sesi Anda telah berakhir atau Token tidak sah. Silakan login kembali.');
+      localStorage.clear();
+      window.location.href = '#/login';
+      window.location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
+
+// =============================================
+// ROUTES
+// =============================================
 const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
@@ -14,7 +47,7 @@ const routes = [
   {
     path: '/about',
     component: About,
-    meta: { requiresAuth: true } // tugas: about juga diproteksi
+    meta: { requiresAuth: true }
   }
 ];
 
@@ -23,7 +56,7 @@ const router = createRouter({
   routes
 });
 
-// Navigation Guard
+// Navigation Guards
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true';
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
@@ -34,6 +67,9 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+// =============================================
+// ROOT APP
+// =============================================
 const app = createApp({
   template: `
     <div>
@@ -63,8 +99,7 @@ const app = createApp({
   methods: {
     logout() {
       if (confirm('Apakah Anda yakin ingin keluar aplikasi?')) {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userToken');
+        localStorage.clear();
         this.isLoggedIn = false;
         this.$router.push('/');
       }

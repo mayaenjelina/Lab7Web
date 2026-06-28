@@ -1187,3 +1187,37 @@ Pada praktikum ini berhasil diimplementasikan sistem autentikasi dan
 keamanan rute pada SPA menggunakan Vue Router Navigation Guards. Halaman 
 Kelola Artikel dan About hanya dapat diakses oleh pengguna yang sudah 
 login, dibuktikan dengan adanya token di localStorage browser.
+
+-------------
+## Praktikum 14 - Keamanan API, Token Authentication & Axios Interceptors
+
+### Langkah 1 - Membuat ApiAuthFilter di CI4
+Buat `app/Filters/ApiAuthFilter.php` untuk memeriksa token di HTTP Header.
+
+### Langkah 2 - Daftarkan Filter
+Tambahkan `apiauth` di `app/Config/Filters.php`.
+
+### Langkah 3 - Terapkan Filter ke Routes
+Proteksi endpoint POST, PUT, DELETE dengan filter apiauth di Routes.php.
+
+### Langkah 4 - Axios Interceptors di app.js
+Tambahkan interceptor yang otomatis menyuntikkan token ke setiap request.
+
+### Pengujian Postman - Tanpa Token
+Request POST tanpa token menghasilkan 401 Unauthorized.
+![semua data](/ci4/assets/pert14/401.png)
+
+### Pengujian Browser - Dengan Token
+Token berhasil disuntikkan otomatis oleh Axios Interceptors.
+![semua data](/ci4/assets/pert14/hasil.png)
+
+### Kesimpulan
+**Vue Router Navigation Guards** bekerja di sisi klien (browser) —
+mencegah user mengakses halaman tertentu tanpa login, namun tidak
+melindungi API dari serangan langsung via Postman/tools lain.
+
+**CodeIgniter Filters** bekerja di sisi server — memvalidasi token
+di setiap request yang masuk, sehingga endpoint API benar-benar
+aman meskipun ditembak langsung tanpa melalui browser.
+
+Keduanya saling melengkapi untuk keamanan end-to-end.

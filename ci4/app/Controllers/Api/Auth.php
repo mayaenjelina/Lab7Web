@@ -14,8 +14,8 @@ class Auth extends ResourceController
 
         $model = new UserModel();
         $user = $model->where('username', $username)
-                      ->orWhere('useremail', $username)
-                      ->first();
+                ->orWhere('useremail', $username)
+                    ->first();
 
         if ($user) {
             if ($password === $user['userpassword'] || 
